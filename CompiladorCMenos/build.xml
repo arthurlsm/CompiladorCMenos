@@ -1,13 +1,13 @@
 <project name="Compilador C-" default="teste" basedir=".">
-	<property name="nomeArquivoSableCC" value="cmenos.sablecc" />
+	<property name="sableccFile" value="./src/cmenos.sablecc" />
 	
 	<target name="teste">
-		<echo> ${nomeArquivoSableCC} </echo>
+		<echo> ${sableccFile} </echo>
 	</target>
 	
 	<target name="executarSableCC">
 		<java jar="sablecc.jar" fork="true">
-    		<arg value="${nomeArquivoSableCC}"/>
+    		<arg value="${sableccFile}"/>
         </java>
     </target>
 </project>

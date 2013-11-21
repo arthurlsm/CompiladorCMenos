@@ -70,14 +70,14 @@ Helpers
 		[0x0be7..0x0bef] | [0x0c66..0x0c6f] | [0x0ce6..0x0cef] | [0x0d66..0x0d6f] |
 		[0x0e50..0x0e59] | [0x0ed0..0x0ed9] | [0x0f20..0x0f29] | [0xff10..0xff19];
 	
-	letraOuDigito = unicode_letter | unicode_digit;
+	letra_ou_digito = unicode_letter | unicode_digit;
 	
-	terminadorDeLinha = lf | cr | cr lf;
-	caractereDeEntrada = [unicode_input_character - [cr + lf]];
+	terminador_de_linha = lf | cr | cr lf;
+	caractere_de_entrada = [unicode_input_character - [cr + lf]];
 	
-	espacoEmBranco = (sp | ht | ff | terminadorDeLinha);
+	espaco_em_branco = (sp | ht | ff | terminador_de_linha);
 	
-	identificador = unicode_letter letraOuDigito*;
+	identificador = unicode_letter letra_ou_digito*;
 	
 Tokens
 	
@@ -108,8 +108,8 @@ Tokens
 	menorig = '<=';
 	nao = '!=';
 	
-	espacosEmBranco = espacoEmBranco+;
+	espacos_em_branco = espaco_em_branco+;
 	
 Ignored Tokens
 
-	espacosEmBranco;
+	espacos_em_branco;
