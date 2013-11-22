@@ -1,13 +1,22 @@
-<project name="Compilador C-" default="teste" basedir=".">
-	<property name="sableccFile" value="./src/cmenos.sablecc" />
+<project name="Compilador C-" default="executarSableCC" basedir=".">
+	<property name="sableccFilePath" value="./src/cmenos.sablecc" />
+	<property name="sableccGeneratedDir" value="./src/compilador/sablecc" />
 	
-	<target name="teste">
-		<echo> ${sableccFile} </echo>
-	</target>
+	<target name="checkGeneratedDir">
+	  <condition property="delDir">
+	    <available file="${sableccGeneratedDir}" type="dir"/>
+	  </condition>
+	 </target>
 	
-	<target name="executarSableCC">
+	<target name="delGeneratedDir" depends="checkGeneratedDir" if="delDir">
+		<delete includeemptydirs="true">
+    		<fileset dir="${sableccGeneratedDir}" includes="**/*"/>
+	    </delete>
+ 	</target>
+	
+	<target name="executarSableCC" depends="delGeneratedDir">
 		<java jar="sablecc.jar" fork="true">
-    		<arg value="${sableccFile}"/>
+    		<arg value="${sableccFilePath}"/>
         </java>
     </target>
 </project>
