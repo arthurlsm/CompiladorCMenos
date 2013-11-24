@@ -1,6 +1,7 @@
 <project name="Compilador C-" default="executarSableCC" basedir=".">
 	<property name="sableccFilePath" value="./src/cmenos.sablecc" />
 	<property name="sableccGeneratedDir" value="./src/compilador/sablecc" />
+	<property name="lexerCustomClass" value="./src/compilador/sablecc/lexer/CustomLexer.java" />
 	
 	<target name="checkGeneratedDir">
 	  <condition property="delDir">
@@ -10,6 +11,7 @@
 	
 	<target name="delGeneratedDir" depends="checkGeneratedDir" if="delDir">
 		<delete includeemptydirs="true">
+			<exclude name="${lexerCustomClass}" />
     		<fileset dir="${sableccGeneratedDir}" includes="**/*"/>
 	    </delete>
  	</target>
@@ -18,5 +20,7 @@
 		<java jar="sablecc.jar" fork="true">
     		<arg value="${sableccFilePath}"/>
         </java>
-    </target>
+    	
+		<copy file="CustomLexer.java" todir="./src/compilador/sablecc/lexer"/>
+	</target>
 </project>

@@ -5,14 +5,14 @@ package compilador.sablecc.node;
 import compilador.sablecc.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TComentario extends Token
+public final class TComentarioDeLinha extends Token
 {
-    public TComentario(String text)
+    public TComentarioDeLinha(String text)
     {
         setText(text);
     }
 
-    public TComentario(String text, int line, int pos)
+    public TComentarioDeLinha(String text, int line, int pos)
     {
         setText(text);
         setLine(line);
@@ -22,12 +22,12 @@ public final class TComentario extends Token
     @Override
     public Object clone()
     {
-      return new TComentario(getText(), getLine(), getPos());
+      return new TComentarioDeLinha(getText(), getLine(), getPos());
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTComentario(this);
+        ((Analysis) sw).caseTComentarioDeLinha(this);
     }
 }

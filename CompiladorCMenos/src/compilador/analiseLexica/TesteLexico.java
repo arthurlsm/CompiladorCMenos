@@ -1,16 +1,18 @@
-package compilador.testes.analiseLexica;
+package compilador.analiseLexica;
 
 import java.io.PushbackReader;
 import java.io.StringReader;
 
 import org.junit.*;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.*;
+import compilador.sablecc.lexer.CustomLexer;
 import compilador.sablecc.lexer.Lexer;
+import compilador.sablecc.lexer.LexerException;
 
 public class TesteLexico {
-	public Lexer initLexer(String input) {
-		Lexer lex = new Lexer(new PushbackReader(new StringReader(input)));
+	public CustomLexer initLexer(String input) {
+		CustomLexer lex = new CustomLexer(new PushbackReader(new StringReader(input)));
 		return lex;
 	}
 	
@@ -21,11 +23,11 @@ public class TesteLexico {
 	}
 	
 	public void testeTokens(String input, String ... tokens) throws Exception {
-		Lexer lex = initLexer(input);
+		CustomLexer lex = initLexer(input);
 		
 		for(String tok : tokens) {
 			String tclass = nextTokenClass(lex);
-			assertEquals("O tipo de Token não casou com a string", tok, tclass);
+			assertEquals("O tipo de Token não casou com a entrada", tok, tclass);
 		}
 	}
 	
@@ -84,12 +86,30 @@ public class TesteLexico {
 	}
 	
 	@Test
-	public void comentarios() throws Exception {
-		testeTokens("//Teste de comentario de linha1", "TComentario");
-		testeTokens("//Teste de comentario de linha 2\r", "TComentario");
-		testeTokens("//Teste de comentario de linha 3\n", "TComentario");
-		testeTokens("//Teste de comentario de linha 4\r\n", "TComentario");
-		testeTokens("//Teste de comentario de linha 5\u001a", "TComentario");
+	public void comentarioDeLinha() throws Exception {
+		testeTokens("//Teste de comentario de linha1", "TComentarioDeLinha");
+		testeTokens("//Teste de comentario de linha 2\r", "TComentarioDeLinha");
+		testeTokens("//Teste de comentario de linha 3\n", "TComentarioDeLinha");
+		testeTokens("//Teste de comentario de linha 4\r\n", "TComentarioDeLinha");
+		testeTokens("//Teste de comentario de linha 5\u001a", "TComentarioDeLinha");
+		testeTokens("//Teste //de comentario de linha 5\u001a", "TComentarioDeLinha");
+	}
+		
+	@Test
+	public void comentarioDeBloco() throws Exception {
+		testeTokens("/* Comentário de bloco válido */", "TComentarioBloco");
+		testeTokens("/* /* Comentário de bloco válido */ */", "TComentarioBloco");
+	}
+	
+	@Test(expected=LexerException.class)
+	public void comentarioDeBlocoErroFechamento() throws Exception {
+		testeTokens("/* /* Comentario sem um fechamento */", "InvalidToken");
+	}
+	
+	@Test(expected=LexerException.class)
+	public void tokensInvalidos() throws Exception {
+		testeTokens("_soma", "InvalidToken");
+		testeTokens("$idade", "InvalidToken");
 	}
 	
 }

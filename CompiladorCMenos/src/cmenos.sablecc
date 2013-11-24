@@ -22,47 +22,57 @@ Helpers
 	
 	sequencia_escape = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
 	caractere_string = [caractere_de_entrada - ['"' + '\']] | sequencia_escape;
+
+States
+
+	normal, comentario;
 	
 Tokens
 	
 	/* Palavras chaves */
-	else = 'else';
-	if = 'if';
-	int = 'int';
-	string = 'string';
-	return = 'return';
-	void = 'void';
-	while = 'while';
+	{normal} else = 'else';
+	{normal} if = 'if';
+	{normal} int = 'int';
+	{normal} string = 'string';
+	{normal} return = 'return';
+	{normal} void = 'void';
+	{normal} while = 'while';
 	
 	/* Símbolos especiais */
-	soma = '+';
-	sub = '-';
-	mult = '*';
-	div = '/';
-	menorq = '<';
-	menorig = '<=';
-	maiorq = '>';
-	maiorig = '>=';
-	igual = '==';
-	nao = '!=';
-	atrib = '=';
-	ptvirg = ';';
-	virg = ',';
-	apar = '(';
-	fpar = ')';
-	acol = '[';
-	fcol = ']';
-	achave = '{';
-	fchave = '}';
+	{normal} soma = '+';
+	{normal} sub = '-';
+	{normal} mult = '*';
+	{normal} div = '/';
+	{normal} menorq = '<';
+	{normal} menorig = '<=';
+	{normal} maiorq = '>';
+	{normal} maiorig = '>=';
+	{normal} igual = '==';
+	{normal} nao = '!=';
+	{normal} atrib = '=';
+	{normal} ptvirg = ';';
+	{normal} virg = ',';
+	{normal} apar = '(';
+	{normal} fpar = ')';
+	{normal} acol = '[';
+	{normal} fcol = ']';
+	{normal} achave = '{';
+	{normal} fchave = '}';
 	
-	id = letra+;
-	num = digito+;
+	{normal} id = letra+;
+	{normal} num = digito+;
 	
-	string_literal = '"' caractere_string* '"';
+	{normal} string_literal = '"' caractere_string* '"';
 	
-	espacos_em_branco = espaco_em_branco+;
-	comentario = comentario_de_linha;
+	{normal} espacos_em_branco = espaco_em_branco+;
+	{normal} comentario_de_linha = '//' caractere_de_entrada* terminador_de_linha?;
+	
+	{normal->comentario, comentario} comentario_bloco = '/*';
+	{comentario} comentario_bloco_fim = '*/';
+	{comentario} comentario_bloco_corpo = [caractere_entrada_unicode - ['*' + '/']]*;
+	{comentario} estrela = '*';
+	{comentario} barra = '/';
 	
 Ignored Tokens
 
-	espacos_em_branco, comentario;
+	espacos_em_branco, comentario_de_linha, comentario_bloco;
