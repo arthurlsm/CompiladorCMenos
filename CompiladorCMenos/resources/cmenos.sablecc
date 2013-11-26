@@ -1,0 +1,78 @@
+Package br.ufs.compilador;
+
+Helpers
+
+	caractere_entrada_unicode = [0..0xffff];
+	ht = 0x0009;
+	lf = 0x000a;
+	ff = 0x000c;
+	cr = 0x000d;
+	sp = ' ';
+	
+	letra_minuscula = ['a'..'z'];
+	letra_maiscula = ['A'..'Z'];
+	letra = letra_minuscula | letra_maiscula;
+	digito = ['0'..'9'];
+	
+	terminador_de_linha = lf | cr | cr lf;
+	espaco_em_branco = (sp | ht | ff | terminador_de_linha);
+	
+	caractere_de_entrada = [caractere_entrada_unicode - [cr + lf]];
+	comentario_de_linha = '//' caractere_de_entrada* terminador_de_linha?;
+	
+	sequencia_escape = '\b' | '\t' | '\n' | '\f' | '\r' | '\"' | '\' ''' | '\\';
+	caractere_string = [caractere_de_entrada - ['"' + '\']] | sequencia_escape;
+
+States
+
+	normal, comentario;
+	
+Tokens
+	
+	/* Palavras chaves */
+	{normal} else = 'else';
+	{normal} if = 'if';
+	{normal} int = 'int';
+	{normal} string = 'string';
+	{normal} return = 'return';
+	{normal} void = 'void';
+	{normal} while = 'while';
+	
+	/* Símbolos especiais */
+	{normal} soma = '+';
+	{normal} sub = '-';
+	{normal} mult = '*';
+	{normal} div = '/';
+	{normal} menorq = '<';
+	{normal} menorig = '<=';
+	{normal} maiorq = '>';
+	{normal} maiorig = '>=';
+	{normal} igual = '==';
+	{normal} nao = '!=';
+	{normal} atrib = '=';
+	{normal} ptvirg = ';';
+	{normal} virg = ',';
+	{normal} apar = '(';
+	{normal} fpar = ')';
+	{normal} acol = '[';
+	{normal} fcol = ']';
+	{normal} achave = '{';
+	{normal} fchave = '}';
+	
+	{normal} id = letra+;
+	{normal} num = digito+;
+	
+	{normal} string_literal = '"' caractere_string* '"';
+	
+	{normal} espacos_em_branco = espaco_em_branco+;
+	{normal} comentario_de_linha = '//' caractere_de_entrada* terminador_de_linha?;
+	
+	{normal->comentario, comentario} comentario_bloco = '/*';
+	{comentario} comentario_bloco_fim = '*/';
+	{comentario} comentario_bloco_corpo = [caractere_entrada_unicode - ['*' + '/']]*;
+	{comentario} estrela = '*';
+	{comentario} barra = '/';
+	
+Ignored Tokens
+
+	espacos_em_branco, comentario_de_linha, comentario_bloco;

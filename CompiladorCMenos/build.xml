@@ -1,26 +1,48 @@
 <project name="Compilador C-" default="executarSableCC" basedir=".">
-	<property name="sableccFilePath" value="./src/cmenos.sablecc" />
-	<property name="sableccGeneratedDir" value="./src/compilador/sablecc" />
-	<property name="lexerCustomClass" value="./src/compilador/sablecc/lexer/CustomLexer.java" />
+	<property name="analysisDir" value="./src/br/ufs/compilador/analysis/" />
+	<property name="lexerDir" value="./src/br/ufs/compilador/lexer/" />
+	<property name="nodeDir" value="./src/br/ufs/compilador/node/" />
+	<property name="dirCompilador" value="../src/br/ufs/compilador/" />
+	<property name="jarSableCC" value="./lib/sablecc.jar" />
+	<property name="arquivoSableCC" value="./resources/cmenos.sablecc" />
 	
-	<target name="checkGeneratedDir">
-	  <condition property="delDir">
-	    <available file="${sableccGeneratedDir}" type="dir"/>
-	  </condition>
+	<property name="diretorioOrigem" value="./resources/br" />
+	<property name="diretorioDestino" value="./src/br" />
+	
+	<target name="checkGeneratedDirs">
+		<condition property="delDirs">
+  	  		<and>
+	  			<available file="${analysisDir}" type="dir"/>
+	  			<available file="${lexerDir}" type="dir"/>
+    			<available file="${nodeDir}" type="dir"/>
+	  		</and>
+  	 	</condition>
 	 </target>
 	
-	<target name="delGeneratedDir" depends="checkGeneratedDir" if="delDir">
-		<delete includeemptydirs="true">
-			<exclude name="${lexerCustomClass}" />
-    		<fileset dir="${sableccGeneratedDir}" includes="**/*"/>
+	<target name="delGeneratedDirs" depends="checkGeneratedDirs" if="delDirs">
+		<delete includeemptydirs="true" verbose="true">
+    		<fileset dir="${analysisDir}" includes="**/*"/>
+			<fileset dir="${lexerDir}" includes="**/*"/>
+    		<fileset dir="${nodeDir}" includes="**/*"/>
 	    </delete>
  	</target>
-	
-	<target name="executarSableCC" depends="delGeneratedDir">
-		<java jar="sablecc.jar" fork="true">
-    		<arg value="${sableccFilePath}"/>
-        </java>
-    	
-		<copy file="CustomLexer.java" todir="./src/compilador/sablecc/lexer"/>
+
+	<target name="executarSableCC" depends="delGeneratedDirs">
+		<mkdir dir="${dirCompilador}" />
+		<java jar="${jarSableCC}" fork="true">
+			<arg value="${arquivoSableCC}"/>
+        </java>	
 	</target>
+
+	<target name="moverArquivos" depends="executarSableCC">
+	    <move todir="${diretorioDestino}" includeEmptyDirs="yes" verbose="true">
+	    	<fileset dir="${diretorioOrigem}" >
+	    		<include name="**/*" />
+	    	</fileset>
+	    </move>
+	</target>
+	
+	<target name="main" depends="moverArquivos">
+			<copy file="./resources/CustomLexer.java" todir="./src/br/ufs/compilador/lexer"/>
+	</target>	
 </project>
