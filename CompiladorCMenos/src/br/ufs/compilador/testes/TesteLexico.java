@@ -98,14 +98,15 @@ public class TesteLexico {
 	@Test
 	public void comentarioDeBloco() throws Exception {
 		testeTokens("/* Comentário de bloco válido */", "TComentarioBloco");
-		testeTokens("/* /* Comentário de bloco válido */ */", "TComentarioBloco");
+		testeTokens("/* /* Comentário de bloco válido */", "TComentarioBloco");
 	}
 	
 	@Test(expected=LexerException.class)
-	public void comentarioDeBlocoErroFechamento() throws Exception {
-		testeTokens("/* /* Comentario sem um fechamento */", "InvalidToken");
+	public void comentarioDeBlocoErro() throws Exception {
+		testeTokens("/* Comentario sem fechamento.", "InvalidToken");
 	}
 	
+
 	@Test(expected=LexerException.class)
 	public void tokensInvalidos() throws Exception {
 		testeTokens("_soma", "InvalidToken");
