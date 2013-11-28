@@ -1,7 +1,10 @@
-package br.ufs.compilador.lexer;
+package br.ufs.compilador.custom;
 
 import java.io.PushbackReader;
 
+import br.ufs.compilador.lexer.Lexer;
+import br.ufs.compilador.lexer.LexerException;
+import br.ufs.compilador.lexer.Lexer.State;
 import br.ufs.compilador.node.EOF;
 import br.ufs.compilador.node.InvalidToken;
 import br.ufs.compilador.node.TComentarioBloco;

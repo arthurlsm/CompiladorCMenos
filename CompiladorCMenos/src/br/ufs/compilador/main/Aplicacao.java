@@ -1,11 +1,11 @@
-package br.ufs.compilador.aplicacao;
+package br.ufs.compilador.main;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
 
-import br.ufs.compilador.lexer.CustomLexer;
+import br.ufs.compilador.custom.CustomLexer;
 import br.ufs.compilador.lexer.LexerException;
 import br.ufs.compilador.node.EOF;
 import br.ufs.compilador.node.TComentarioBloco;

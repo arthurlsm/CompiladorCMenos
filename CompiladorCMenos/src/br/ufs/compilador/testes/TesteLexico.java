@@ -6,7 +6,7 @@ import java.io.StringReader;
 import org.junit.*;
 
 import static org.junit.Assert.*;
-import br.ufs.compilador.lexer.CustomLexer;
+import br.ufs.compilador.custom.CustomLexer;
 import br.ufs.compilador.lexer.Lexer;
 import br.ufs.compilador.lexer.LexerException;
 
